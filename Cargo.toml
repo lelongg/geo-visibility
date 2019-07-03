@@ -1,0 +1,23 @@
+[package]
+name = "geo-visibility"
+version = "0.1.0"
+authors = ["Gérald Lelong <gerald.lelong@easymov.fr>"]
+edition = "2018"
+license = "ISC"
+readme = "README.md"
+repository = "https://github.com/lelongg/geo-visibility"
+documentation = "https://docs.rs/geo-visibility/"
+description = "Compute visibility polygon"
+keywords = ["geo", "polygon", "visibility"]
+categories = ["algorithms"]
+
+[dependencies]
+approx = "0.3.2"
+geo = "0.12.2"
+geo-booleanop = "0.2.0"
+
+[dev-dependencies]
+rand_pcg = "0.2.0"
+data-uri-utils = "0.1.0"
+geo-svg = "0.1.2"
+geo-rand = "0.1.0"

@@ -54,7 +54,7 @@ impl AngleComparator {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use geo::{point, Coordinate, Line, Point};
+    use geo::point;
 
     #[test]
     fn compare_angle_with_two_points_in_general_position() {

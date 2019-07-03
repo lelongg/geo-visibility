@@ -16,14 +16,20 @@ The [`visibility`] method is provided by the [`Visibility`] trait which is imple
 use geo::{Coordinate, Line};
 use geo_visibility::Visibility;
 
-let lines = [
+let point = geo::Point::new(0.0, 0.0);
+
+let lines = vec![
     Line::new(
-        Coordinate { x: 0.0, y: 0.0 },
-        Coordinate { x: 1.0, y: 8.0 },
+        Coordinate { x: 1.0, y: 1.0 },
+        Coordinate { x: 1.0, y: -1.0 },
+    ),
+    Line::new(
+        Coordinate { x: -1.0, y: -1.0 },
+        Coordinate { x: -1.0, y: -2.0 },
     ),
 ];
 
-let visibility_polygon = point.visibility(&lines);
+let visibility_polygon = point.visibility(lines.as_slice());
 ```
 
 [`Visibility`]: visibility/trait.Visibility.html

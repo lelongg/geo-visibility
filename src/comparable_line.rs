@@ -97,7 +97,7 @@ impl Ord for ComparableLine {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use geo::{point, Coordinate, Line, Point};
+    use geo::{point, Point};
 
     #[test]
     fn compare_two_line_segments_with_no_common_endpoints() {

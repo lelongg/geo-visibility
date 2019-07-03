@@ -183,12 +183,10 @@ impl Visibility<geo::Polygon<f64>> for geo::Polygon<f64> {
 
 #[cfg(test)]
 mod tests {
-    use super::random_polygons::*;
     use super::*;
     use data_uri_utils::svg_str_to_data_uri;
-    use geo::point;
+    use geo_rand::{GeoRand, GeoRandParameters};
     use geo_svg::svg::ToSvg;
-    use rand::SeedableRng;
 
     fn test_visibility(
         [origin_x, origin_y]: [f64; 2],
@@ -376,7 +374,14 @@ mod tests {
             geo::Coordinate { x: 0., y: 0.0 },
             geo::Coordinate { x: 400.0, y: 400.0 },
         );
-        let holes = random_polygons(&mut rng, rect.width(), rect.height());
+        let holes = geo::MultiPolygon::rand(
+            &mut rng,
+            &GeoRandParameters {
+                max_x: rect.width(),
+                max_y: rect.height(),
+                ..GeoRandParameters::default()
+            },
+        );
         let polygons = geo::Polygon::from(rect).difference(&holes);
         let polygon = polygons.0.get(0).unwrap().clone();
         let point = geo::Point::new(rect.width() / 2.0, rect.height() / 2.0);

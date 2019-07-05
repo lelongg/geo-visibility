@@ -14,11 +14,14 @@ categories = ["algorithms"]
 [dependencies]
 approx = "0.3.2"
 geo = "0.12.2"
-geo-booleanop = "0.2.0"
+geo-clipper = { path = "../geo-clipper" }
 
 [dev-dependencies]
 rand_core = "0.5.0"
 rand_pcg = "0.2.0"
 data-uri-utils = "0.1.0"
 geo-svg = "0.1.2"
-geo-rand = "0.1.0"
+geo-rand = "0.2.2"
+
+[patch.crates-io]
+geo-svg = { path = "../geo-svg" }

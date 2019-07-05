@@ -5,8 +5,7 @@ use crate::ray::Ray;
 use crate::utils::approx_equal;
 use crate::visibility_event::{VisibilityEvent, VisibilityEventType};
 use approx::*;
-use geo::algorithm::intersects::Intersects;
-use geo_booleanop::boolean::BooleanOp;
+use geo_clipper::Clipper;
 use std::collections::BTreeSet;
 
 pub trait Visibility<T: ?Sized> {
@@ -24,6 +23,27 @@ impl Visibility<geo::Polygon<f64>> for geo::Point<f64> {
                     .iter()
                     .flat_map(|interior| interior.lines()),
             )
+            .collect();
+        self.visibility(segments.as_slice())
+    }
+}
+
+impl Visibility<geo::MultiPolygon<f64>> for geo::Point<f64> {
+    fn visibility(&self, obstacles: &geo::MultiPolygon<f64>) -> geo::Polygon<f64> {
+        let segments: Vec<_> = obstacles
+            .0
+            .iter()
+            .flat_map(|obstacle| {
+                obstacle
+                    .exterior()
+                    .lines()
+                    .chain(obstacles.0.iter().flat_map(|obstacle| {
+                        obstacle
+                            .interiors()
+                            .iter()
+                            .flat_map(|interior| interior.lines())
+                    }))
+            })
             .collect();
         self.visibility(segments.as_slice())
     }
@@ -154,30 +174,22 @@ fn sort_events_by_angle(origin: &geo::Point<f64>, events: &mut [VisibilityEvent]
     });
 }
 
-impl Visibility<geo::Polygon<f64>> for geo::Polygon<f64> {
-    fn visibility(&self, obstacles: &geo::Polygon<f64>) -> geo::Polygon<f64> {
+/// Warning: this is not the real polygon visibility but the union of its vertices visibility
+impl<T> Visibility<T> for geo::Polygon<f64>
+where
+    geo::Point<f64>: Visibility<T>,
+{
+    fn visibility(&self, obstacles: &T) -> geo::Polygon<f64> {
         let mut visibility_polygon = geo::MultiPolygon(Vec::new());
-
-        let obstacles = if self.intersects(obstacles) {
-            obstacles
-                .difference(self)
-                .0
-                .first()
-                .unwrap_or(obstacles)
-                .clone()
-        } else {
-            obstacles.clone()
-        };
-
-        for point in self.exterior().points_iter() {
-            visibility_polygon = visibility_polygon.union(&point.visibility(&obstacles));
+        for point in self.exterior().points_iter().skip(1) {
+            let polygon = point.visibility(&obstacles);
+            visibility_polygon = visibility_polygon.union(&polygon, 1000.0);
         }
-
         visibility_polygon
             .0
             .first()
             .cloned()
-            .unwrap_or_else(|| geo::Polygon::new(geo::LineString(Vec::new()), Vec::new()))
+            .unwrap_or_else(|| geo::Polygon::new(geo::LineString(vec![]), vec![]))
     }
 }
 
@@ -367,7 +379,7 @@ mod tests {
     }
 
     #[test]
-    fn test_point_visibility() {
+    fn show_point_visibility() {
         use rand_core::SeedableRng;
         let mut rng = rand_pcg::Pcg64::seed_from_u64(2);
         let rect = geo::Rect::new(
@@ -382,7 +394,8 @@ mod tests {
                 ..GeoRandParameters::default()
             },
         );
-        let polygons = geo::Polygon::from(rect).difference(&holes);
+        let polygons = dbg!(geo::Polygon::from(rect).difference(&holes, 1000.0));
+        println!("{}", svg_str_to_data_uri(polygons.to_svg().to_string(),));
         let polygon = polygons.0.get(0).unwrap().clone();
         let point = geo::Point::new(rect.width() / 2.0, rect.height() / 2.0);
         let visibility_polygon = point.visibility(&polygon);
@@ -394,6 +407,47 @@ mod tests {
                     .to_svg()
                     .and(&visibility_polygon.to_svg())
                     .and(&point.to_svg())
+                    .to_string(),
+            )
+        );
+    }
+
+    #[test]
+    fn show_polygon_vertices_visibility() {
+        use rand_core::SeedableRng;
+        let mut rng = rand_pcg::Pcg64::seed_from_u64(4);
+        let rect = geo::Rect::new(
+            geo::Coordinate { x: 0., y: 0.0 },
+            geo::Coordinate { x: 400.0, y: 400.0 },
+        );
+        let rand_parameters = GeoRandParameters {
+            max_x: rect.width(),
+            max_y: rect.height(),
+            max_polygon_vertices_count: 20,
+            ..GeoRandParameters::default()
+        };
+        let mut holes = geo::MultiPolygon::rand(&mut rng, &rand_parameters);
+        let polygons = &holes.0.drain(0..2).collect::<Vec<_>>();
+        let polygon1 = &polygons[0];
+        let polygon2 = &polygons[1];
+        let obstacles = geo::Polygon::from(rect).difference(&holes, 1000.0).0[0].clone();
+        let visibility_polygon1 = polygon1.visibility(&obstacles.difference(polygon2, 1000.0).0[0]);
+        let visibility_polygon2 = polygon2.visibility(&obstacles.difference(polygon1, 1000.0).0[0]);
+        let result = visibility_polygon1
+            .intersection(&visibility_polygon2, 1000.0)
+            .difference(polygon1, 1000.0)
+            .difference(polygon2, 1000.0);
+
+        println!(
+            "{}",
+            svg_str_to_data_uri(
+                obstacles
+                    .difference(polygon1, 1000.0)
+                    .difference(polygon2, 1000.0)
+                    .to_svg()
+                    .and(&visibility_polygon2.to_svg())
+                    .and(&polygon1.to_svg())
+                    .and(&polygon2.to_svg())
                     .to_string(),
             )
         );

@@ -198,7 +198,7 @@ mod tests {
     use super::*;
     use data_uri_utils::svg_str_to_data_uri;
     use geo_rand::{GeoRand, GeoRandParameters};
-    use geo_svg::svg::ToSvg;
+    use geo_svg::ToSvg;
 
     fn test_visibility(
         [origin_x, origin_y]: [f64; 2],
@@ -223,8 +223,8 @@ mod tests {
             svg_str_to_data_uri(
                 result
                     .to_svg()
-                    .and(&lines.as_slice().to_svg())
-                    .and(&origin.to_svg())
+                    .and(lines.to_svg())
+                    .and(origin.to_svg())
                     .to_string()
             )
         );
@@ -405,8 +405,8 @@ mod tests {
             svg_str_to_data_uri(
                 polygon
                     .to_svg()
-                    .and(&visibility_polygon.to_svg())
-                    .and(&point.to_svg())
+                    .and(visibility_polygon.to_svg())
+                    .and(point.to_svg())
                     .to_string(),
             )
         );
@@ -433,7 +433,7 @@ mod tests {
         let obstacles = geo::Polygon::from(rect).difference(&holes, 1000.0).0[0].clone();
         let visibility_polygon1 = polygon1.visibility(&obstacles.difference(polygon2, 1000.0).0[0]);
         let visibility_polygon2 = polygon2.visibility(&obstacles.difference(polygon1, 1000.0).0[0]);
-        let result = visibility_polygon1
+        let _result = visibility_polygon1
             .intersection(&visibility_polygon2, 1000.0)
             .difference(polygon1, 1000.0)
             .difference(polygon2, 1000.0);
@@ -445,9 +445,9 @@ mod tests {
                     .difference(polygon1, 1000.0)
                     .difference(polygon2, 1000.0)
                     .to_svg()
-                    .and(&visibility_polygon2.to_svg())
-                    .and(&polygon1.to_svg())
-                    .and(&polygon2.to_svg())
+                    .and(visibility_polygon2.to_svg())
+                    .and(polygon1.to_svg())
+                    .and(polygon2.to_svg())
                     .to_string(),
             )
         );

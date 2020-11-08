@@ -12,7 +12,7 @@ keywords = ["geo", "polygon", "visibility"]
 categories = ["algorithms"]
 
 [dependencies]
-approx = "0.3.2"
+approx = "0.4.0"
 geo = "0.12.2"
 geo-clipper = "0.2.0"
 

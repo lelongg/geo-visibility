@@ -103,7 +103,7 @@ impl Visibility<[geo::Line<f64>]> for geo::Point<f64> {
                 state.remove(&segment);
             }
 
-            if let Some(first_state) = state.iter().nth(0) {
+            if let Some(first_state) = state.iter().next() {
                 if segment < *first_state {
                     let ray = Ray::new(geo::Line::new(*self, event.point()));
                     if let Some(intersection) = ray.intersects(&first_state.line) {

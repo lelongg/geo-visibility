@@ -41,7 +41,7 @@ impl Ray {
             }
         } else {
             let u = cross(ao, direction) / det;
-            if u < 0.0 || 1.0 < u {
+            if !(0.0..=1.0).contains(&u) {
                 None
             } else {
                 let t = -cross(ab, ao) / det;

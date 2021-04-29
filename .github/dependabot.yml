@@ -1,0 +1,29 @@
+version: 2
+updates:
+- package-ecosystem: cargo
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: geo
+    versions:
+    - 0.17.0
+    - 0.17.1
+    - 0.18.0
+  - dependency-name: rand_core
+    versions:
+    - 0.6.1
+    - 0.6.2
+  - dependency-name: rand_pcg
+    versions:
+    - 0.3.0
+  - dependency-name: geo-clipper
+    versions:
+    - 0.4.0
+  - dependency-name: approx
+    versions:
+    - 0.4.0
+  - dependency-name: geo-svg
+    versions:
+    - 0.3.0

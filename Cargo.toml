@@ -14,7 +14,7 @@ categories = ["algorithms"]
 [dependencies]
 approx = "0.5.0"
 geo = "0.18.0"
-geo-clipper = "0.6.0"
+geo-clipper = "0.7.0"
 
 [dev-dependencies]
 rand_core = "0.6.2"

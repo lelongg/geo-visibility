@@ -19,6 +19,6 @@ geo-clipper = "0.7.1"
 [dev-dependencies]
 rand_core = "0.6.2"
 rand_pcg = "0.3.0"
-data-uri-utils = "0.1.0"
+data-uri-utils = "0.2.0"
 geo-svg = "0.5.0"
 geo-rand = "0.3.0"

@@ -13,7 +13,7 @@ categories = ["algorithms"]
 
 [dependencies]
 approx = "0.5.0"
-geo = "0.21.0"
+geo = "0.22.0"
 geo-clipper = "0.7.1"
 
 [dev-dependencies]

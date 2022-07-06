@@ -6,6 +6,7 @@ use crate::utils::approx_equal;
 use crate::visibility_event::{VisibilityEvent, VisibilityEventType};
 use approx::*;
 use geo_clipper::Clipper;
+use log::warn;
 use std::collections::BTreeSet;
 
 pub trait Visibility<T: ?Sized> {
@@ -65,7 +66,7 @@ impl Visibility<[geo::Line<f64>]> for geo::Point<f64> {
                     continue;
                 }
                 Orientation::RightTurn => {
-                    events.push(VisibilityEvent::start(&segment));
+                    events.push(VisibilityEvent::start(segment));
                     events.push(VisibilityEvent::end(&geo::Line::new(
                         segment.end,
                         segment.start,
@@ -76,7 +77,7 @@ impl Visibility<[geo::Line<f64>]> for geo::Point<f64> {
                         segment.end,
                         segment.start,
                     )));
-                    events.push(VisibilityEvent::end(&segment));
+                    events.push(VisibilityEvent::end(segment));
                 }
             }
 
@@ -118,9 +119,7 @@ impl Visibility<[geo::Line<f64>]> for geo::Point<f64> {
                             }
                         }
                     } else {
-                        eprintln!(
-                            "ray intersects a line segment iff the line segment is in the state"
-                        );
+                        warn!("ray intersects a line segment iff the line segment is in the state");
                     }
                 }
             } else {
@@ -181,8 +180,8 @@ where
 {
     fn visibility(&self, obstacles: &T) -> geo::Polygon<f64> {
         let mut visibility_polygon = geo::MultiPolygon(Vec::new());
-        for point in self.exterior().points_iter().skip(1) {
-            let polygon = point.visibility(&obstacles);
+        for point in self.exterior().points().skip(1) {
+            let polygon = point.visibility(obstacles);
             visibility_polygon = visibility_polygon.union(&polygon, 1000.0);
         }
         visibility_polygon
@@ -230,13 +229,13 @@ mod tests {
         );
 
         assert_eq!(
-            result.exterior().points_iter().count().saturating_sub(1),
+            result.exterior().points().count().saturating_sub(1),
             visibility.len()
         );
 
         for (i, point) in result
             .exterior()
-            .points_iter()
+            .points()
             .take(visibility.len())
             .enumerate()
         {

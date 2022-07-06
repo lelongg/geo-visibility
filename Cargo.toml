@@ -1,24 +1,25 @@
 [package]
-name = "geo-visibility"
-version = "0.5.1-alpha.0"
 authors = ["Gérald Lelong <gerald.lelong@easymov.fr>"]
+categories = ["algorithms"]
+description = "Compute visibility polygon"
+documentation = "https://docs.rs/geo-visibility/"
 edition = "2018"
+keywords = ["geo", "polygon", "visibility"]
 license = "ISC"
+name = "geo-visibility"
 readme = "README.md"
 repository = "https://github.com/lelongg/geo-visibility"
-documentation = "https://docs.rs/geo-visibility/"
-description = "Compute visibility polygon"
-keywords = ["geo", "polygon", "visibility"]
-categories = ["algorithms"]
+version = "0.5.1-alpha.0"
 
 [dependencies]
 approx = "0.5.0"
 geo = "0.22.1"
 geo-clipper = "0.7.1"
+log = "0.4.17"
 
 [dev-dependencies]
+data-uri-utils = "0.2.0"
+geo-rand = "0.3.0"
+geo-svg = "0.5.0"
 rand_core = "0.6.2"
 rand_pcg = "0.3.0"
-data-uri-utils = "0.2.0"
-geo-svg = "0.5.0"
-geo-rand = "0.3.0"

@@ -1,5 +1,5 @@
 use crate::{orientation::Orientation, utils::approx_equal};
-use geo::algorithm::euclidean_distance::EuclideanDistance;
+use geo::{Distance, Euclidean};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct ComparableLine {
@@ -74,7 +74,7 @@ impl Ord for ComparableLine {
         let cdb = Orientation::from(c, d, b);
 
         if cdb == Orientation::Collinear && cda == Orientation::Collinear {
-            if self.origin.euclidean_distance(&a) < self.origin.euclidean_distance(&c) {
+            if Euclidean::distance(&self.origin,& a) < Euclidean::distance(&self.origin, &c) {
                 std::cmp::Ordering::Less
             } else {
                 std::cmp::Ordering::Greater

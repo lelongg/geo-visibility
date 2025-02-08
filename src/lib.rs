@@ -9,19 +9,19 @@
 //!
 //! ```
 //! # fn main() {
-//! use geo::{Coordinate, Line};
+//! use geo::{Coord, Line};
 //! use geo_visibility::Visibility;
 //!
 //! let point = geo::Point::new(0.0, 0.0);
 //!
 //! let lines = vec![
 //!     Line::new(
-//!         Coordinate { x: 1.0, y: 1.0 },
-//!         Coordinate { x: 1.0, y: -1.0 },
+//!         Coord { x: 1.0, y: 1.0 },
+//!         Coord { x: 1.0, y: -1.0 },
 //!     ),
 //!     Line::new(
-//!         Coordinate { x: -1.0, y: -1.0 },
-//!         Coordinate { x: -1.0, y: -2.0 },
+//!         Coord { x: -1.0, y: -1.0 },
+//!         Coord { x: -1.0, y: -2.0 },
 //!     ),
 //! ];
 //!

@@ -1,12 +1,12 @@
 use approx::abs_diff_eq;
-use geo::algorithm::euclidean_distance::EuclideanDistance;
-
+use geo::{Distance, Euclidean};
+ 
 pub fn cross(a: geo::Point<f64>, b: geo::Point<f64>) -> f64 {
     a.x() * b.y() - a.y() * b.x()
 }
 
 pub fn approx_equal(a: &geo::Point<f64>, b: &geo::Point<f64>) -> bool {
-    abs_diff_eq!(a.euclidean_distance(b), 0.0)
+    abs_diff_eq!(Euclidean::distance(a, b), 0.0)
 }
 
 #[cfg(test)]

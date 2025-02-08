@@ -1,6 +1,6 @@
 use crate::utils::cross;
 use approx::abs_diff_eq;
-use geo::algorithm::euclidean_distance::EuclideanDistance;
+use geo::{Distance, Euclidean};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct AngleComparator {
@@ -38,7 +38,7 @@ impl AngleComparator {
         let det = cross(oa, ob);
 
         if abs_diff_eq!(det, 0.0) {
-            if a.euclidean_distance(&self.origin) < b.euclidean_distance(&self.origin) {
+            if Euclidean::distance(a, &self.origin) < Euclidean::distance(b, &self.origin) {
                 std::cmp::Ordering::Less
             } else {
                 std::cmp::Ordering::Greater

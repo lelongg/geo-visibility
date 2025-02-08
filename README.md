@@ -13,19 +13,19 @@ The following example shows how to compute the visibility polygon of a point amo
 The [`visibility`] method is provided by the [`Visibility`] trait which is implemented for most [geo-types](https://docs.rs/geo-types/0.4.3/geo_types/).
 
 ```rust
-use geo::{Coordinate, Line};
+use geo::{Coord, Line};
 use geo_visibility::Visibility;
 
 let point = geo::Point::new(0.0, 0.0);
 
 let lines = vec![
     Line::new(
-        Coordinate { x: 1.0, y: 1.0 },
-        Coordinate { x: 1.0, y: -1.0 },
+        Coord { x: 1.0, y: 1.0 },
+        Coord { x: 1.0, y: -1.0 },
     ),
     Line::new(
-        Coordinate { x: -1.0, y: -1.0 },
-        Coordinate { x: -1.0, y: -2.0 },
+        Coord { x: -1.0, y: -1.0 },
+        Coord { x: -1.0, y: -2.0 },
     ),
 ];
 

@@ -209,8 +209,8 @@ mod tests {
             .iter()
             .map(|[[x1, y1], [x2, y2]]| {
                 geo::Line::new(
-                    geo::Coordinate { x: *x1, y: *y1 },
-                    geo::Coordinate { x: *x2, y: *y2 },
+                    geo::Coord { x: *x1, y: *y1 },
+                    geo::Coord { x: *x2, y: *y2 },
                 )
             })
             .collect();
@@ -382,8 +382,8 @@ mod tests {
         use rand_core::SeedableRng;
         let mut rng = rand_pcg::Pcg64::seed_from_u64(2);
         let rect = geo::Rect::new(
-            geo::Coordinate { x: 0., y: 0.0 },
-            geo::Coordinate { x: 400.0, y: 400.0 },
+            geo::Coord { x: 0., y: 0.0 },
+            geo::Coord { x: 400.0, y: 400.0 },
         );
         let holes = geo::MultiPolygon::rand(
             &mut rng,
@@ -416,8 +416,8 @@ mod tests {
         use rand_core::SeedableRng;
         let mut rng = rand_pcg::Pcg64::seed_from_u64(4);
         let rect = geo::Rect::new(
-            geo::Coordinate { x: 0., y: 0.0 },
-            geo::Coordinate { x: 400.0, y: 400.0 },
+            geo::Coord { x: 0., y: 0.0 },
+            geo::Coord { x: 400.0, y: 400.0 },
         );
         let rand_parameters = GeoRandParameters {
             max_x: rect.width(),
@@ -456,21 +456,21 @@ mod tests {
     fn test_sort_events_by_angle() {
         let mut events = vec![
             VisibilityEvent::end(&geo::Line::new(
-                geo::Coordinate {
+                geo::Coord {
                     x: 192.473_727_120_354_4,
                     y: 390.035_278_687_596_2,
                 },
-                geo::Coordinate {
+                geo::Coord {
                     x: 70.429_624_976_228_72,
                     y: 389.090_943_707_312_93,
                 },
             )),
             VisibilityEvent::end(&geo::Line::new(
-                geo::Coordinate {
+                geo::Coord {
                     x: 192.473_727_120_354_4,
                     y: 390.035_278_687_596_2,
                 },
-                geo::Coordinate {
+                geo::Coord {
                     x: 23.005_021_972_253_01,
                     y: 392.349_204_790_687_85,
                 },

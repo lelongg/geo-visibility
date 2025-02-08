@@ -58,117 +58,117 @@ impl Ray {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use geo::{point, Coordinate, Line};
+    use geo::{point, Coord, Line};
 
     #[test]
     fn test_ray() {
         assert_eq!(
             Ray::new(Line::new(
-                Coordinate { x: 0.0, y: 0.0 },
-                Coordinate { x: 1.0, y: 0.0 },
+                Coord { x: 0.0, y: 0.0 },
+                Coord { x: 1.0, y: 0.0 },
             ))
             .intersects(&Line::new(
-                Coordinate { x: -1.0, y: 1.0 },
-                Coordinate { x: -1.0, y: -1.0 },
+                Coord { x: -1.0, y: 1.0 },
+                Coord { x: -1.0, y: -1.0 },
             )),
             None
         );
         assert_eq!(
             Ray::new(Line::new(
-                Coordinate { x: 0.0, y: 0.0 },
-                Coordinate { x: 1.0, y: 0.0 },
+                Coord { x: 0.0, y: 0.0 },
+                Coord { x: 1.0, y: 0.0 },
             ))
             .intersects(&Line::new(
-                Coordinate { x: -1E-3, y: 1.0 },
-                Coordinate { x: -1E-3, y: -1.0 },
+                Coord { x: -1E-3, y: 1.0 },
+                Coord { x: -1E-3, y: -1.0 },
             )),
             None
         );
         assert_eq!(
             Ray::new(Line::new(
-                Coordinate { x: 0.0, y: 0.0 },
-                Coordinate { x: 1.0, y: 0.0 },
+                Coord { x: 0.0, y: 0.0 },
+                Coord { x: 1.0, y: 0.0 },
             ))
             .intersects(&Line::new(
-                Coordinate { x: -2.0, y: 0.0 },
-                Coordinate { x: -1.0, y: 0.0 },
+                Coord { x: -2.0, y: 0.0 },
+                Coord { x: -1.0, y: 0.0 },
             )),
             None
         );
         assert_eq!(
             Ray::new(Line::new(
-                Coordinate { x: 0.0, y: 0.0 },
-                Coordinate { x: 1.0, y: 0.0 },
+                Coord { x: 0.0, y: 0.0 },
+                Coord { x: 1.0, y: 0.0 },
             ))
             .intersects(&Line::new(
-                Coordinate { x: 0.0, y: 1.0 },
-                Coordinate { x: 0.0, y: -1.0 },
+                Coord { x: 0.0, y: 1.0 },
+                Coord { x: 0.0, y: -1.0 },
             )),
             Some(point!(x: 0.0, y: 0.0))
         );
         assert_eq!(
             Ray::new(Line::new(
-                Coordinate { x: 0.0, y: 0.0 },
-                Coordinate { x: 1.0, y: 0.0 },
+                Coord { x: 0.0, y: 0.0 },
+                Coord { x: 1.0, y: 0.0 },
             ))
             .intersects(&Line::new(
-                Coordinate { x: -1.0, y: 0.0 },
-                Coordinate { x: 0.0, y: 0.0 },
+                Coord { x: -1.0, y: 0.0 },
+                Coord { x: 0.0, y: 0.0 },
             )),
             Some(point!(x: 0.0, y: 0.0))
         );
         assert_eq!(
             Ray::new(Line::new(
-                Coordinate { x: 0.0, y: 0.0 },
-                Coordinate { x: 1.0, y: 0.0 },
+                Coord { x: 0.0, y: 0.0 },
+                Coord { x: 1.0, y: 0.0 },
             ))
             .intersects(&Line::new(
-                Coordinate { x: 0.0, y: 0.0 },
-                Coordinate { x: -1.0, y: 0.0 },
+                Coord { x: 0.0, y: 0.0 },
+                Coord { x: -1.0, y: 0.0 },
             )),
             Some(point!(x: 0.0, y: 0.0))
         );
         assert_eq!(
             Ray::new(Line::new(
-                Coordinate { x: 0.0, y: 0.0 },
-                Coordinate { x: 1.0, y: 0.0 },
+                Coord { x: 0.0, y: 0.0 },
+                Coord { x: 1.0, y: 0.0 },
             ))
             .intersects(&Line::new(
-                Coordinate { x: 2.0, y: 1.0 },
-                Coordinate { x: 2.0, y: -1.0 },
+                Coord { x: 2.0, y: 1.0 },
+                Coord { x: 2.0, y: -1.0 },
             )),
             Some(point!(x: 2.0, y: 0.0))
         );
         assert_eq!(
             Ray::new(Line::new(
-                Coordinate { x: 0.0, y: 0.0 },
-                Coordinate { x: 1.0, y: 0.0 },
+                Coord { x: 0.0, y: 0.0 },
+                Coord { x: 1.0, y: 0.0 },
             ))
             .intersects(&Line::new(
-                Coordinate { x: 2.0, y: 0.0 },
-                Coordinate { x: 3.0, y: 0.0 },
+                Coord { x: 2.0, y: 0.0 },
+                Coord { x: 3.0, y: 0.0 },
             )),
             Some(point!(x: 2.0, y: 0.0))
         );
         assert_eq!(
             Ray::new(Line::new(
-                Coordinate { x: 0.0, y: 0.0 },
-                Coordinate { x: 1.0, y: 0.0 },
+                Coord { x: 0.0, y: 0.0 },
+                Coord { x: 1.0, y: 0.0 },
             ))
             .intersects(&Line::new(
-                Coordinate { x: 3.0, y: 0.0 },
-                Coordinate { x: 2.0, y: 0.0 },
+                Coord { x: 3.0, y: 0.0 },
+                Coord { x: 2.0, y: 0.0 },
             )),
             Some(point!(x: 2.0, y: 0.0))
         );
         assert_eq!(
             Ray::new(Line::new(
-                Coordinate { x: 0.5, y: 0.0 },
-                Coordinate { x: 2.0, y: 0.0 },
+                Coord { x: 0.5, y: 0.0 },
+                Coord { x: 2.0, y: 0.0 },
             ))
             .intersects(&Line::new(
-                Coordinate { x: 1.0, y: 0.0 },
-                Coordinate { x: 1.0, y: -1.0 },
+                Coord { x: 1.0, y: 0.0 },
+                Coord { x: 1.0, y: -1.0 },
             )),
             Some(point!(x: 1.0, y: 0.0))
         );

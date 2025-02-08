@@ -196,8 +196,9 @@ where
 mod tests {
     use super::*;
     use data_uri_utils::svg_str_to_data_uri;
+    use geo::{Coord, Line};
     use geo_rand::{GeoRand, GeoRandParameters};
-    use geo_svg::ToSvg;
+    use geo_svg::{Color, ToSvg};
 
     fn test_visibility(
         [origin_x, origin_y]: [f64; 2],
@@ -208,10 +209,7 @@ mod tests {
         let lines: Vec<_> = segments
             .iter()
             .map(|[[x1, y1], [x2, y2]]| {
-                geo::Line::new(
-                    geo::Coord { x: *x1, y: *y1 },
-                    geo::Coord { x: *x2, y: *y2 },
-                )
+                geo::Line::new(geo::Coord { x: *x1, y: *y1 }, geo::Coord { x: *x2, y: *y2 })
             })
             .collect();
 
@@ -395,7 +393,7 @@ mod tests {
         );
         let polygons = dbg!(geo::Polygon::from(rect).difference(&holes, 1000.0));
         println!("{}", svg_str_to_data_uri(polygons.to_svg().to_string(),));
-        let polygon = polygons.0.get(0).unwrap().clone();
+        let polygon = polygons.0.first().unwrap().clone();
         let point = geo::Point::new(rect.width() / 2.0, rect.height() / 2.0);
         let visibility_polygon = point.visibility(&polygon);
 
@@ -485,5 +483,74 @@ mod tests {
         );
 
         assert_eq!(events, result);
+    }
+
+    #[test]
+    fn issue_27() {
+        let point = geo::Point::new(1.53, -0.4);
+        let lines = vec![
+            Line {
+                start: Coord { x: 0.0, y: 0.5 },
+                end: Coord { x: 1.5, y: 0.5 },
+            },
+            Line {
+                start: Coord { x: 0.0, y: 0.0 },
+                end: Coord { x: 0.0, y: 1.0 },
+            },
+            Line {
+                start: Coord { x: 1.5, y: 0.5 },
+                end: Coord { x: 1.5, y: 1.5 },
+            },
+            Line {
+                start: Coord { x: 0.5, y: -0.5 },
+                end: Coord { x: 0.5, y: 0.5 },
+            },
+            Line {
+                start: Coord { x: -25.0, y: -25.0 },
+                end: Coord { x: 25.0, y: -25.0 },
+            },
+            Line {
+                start: Coord { x: 25.0, y: -25.0 },
+                end: Coord { x: 25.0, y: 25.0 },
+            },
+            Line {
+                start: Coord { x: 25.0, y: 25.0 },
+                end: Coord { x: -25.0, y: 25.0 },
+            },
+            Line {
+                start: Coord { x: -25.0, y: 25.0 },
+                end: Coord { x: -25.0, y: -25.0 },
+            },
+        ];
+        let vis = point.visibility(lines.as_slice());
+        println!(
+            "{}",
+            svg_str_to_data_uri(
+                vis.to_svg()
+                    .with_color(Color::Named("green"))
+                    .with_stroke_width(0.0)
+                    .and(
+                        lines
+                            .to_svg()
+                            .with_color(Color::Named("red"))
+                            .with_stroke_width(0.1)
+                    )
+                    .and(
+                        point
+                            .to_svg()
+                            .with_color(Color::Named("blue"))
+                            .with_radius(0.1)
+                            .with_stroke_width(0.0)
+                    )
+                    .and(
+                        Coord { x: 0.0, y: 1.0 }
+                            .to_svg()
+                            .with_color(Color::Named("orange"))
+                            .with_radius(0.1)
+                            .with_stroke_width(0.0)
+                    )
+                    .to_string(),
+            )
+        );
     }
 }

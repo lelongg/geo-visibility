@@ -20,6 +20,6 @@ log = "0.4.17"
 [dev-dependencies]
 data-uri-utils = "0.2.0"
 geo-rand = "0.4.0"
-geo-svg = "0.7.2"
+geo-svg = "0.8.0"
 rand_core = "0.9.0"
 rand_pcg = "0.9.0"
